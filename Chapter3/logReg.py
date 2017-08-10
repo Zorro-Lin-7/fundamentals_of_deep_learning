@@ -40,7 +40,7 @@ def loss(output, y):
 
 def training(cost, global_step):
 
-    tf.scalar_summary("cost", cost)
+    tf.summary.scalar("cost", cost) 
     optimizer = tf.train.GradientDescentOptimizer(learning_rate)
     train_op = optimizer.minimize(cost, global_step=global_step)
 
@@ -51,7 +51,7 @@ def evaluate(output, y):
     correct_prediction = tf.equal(tf.argmax(output, 1), tf.argmax(y, 1))
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 
-    tf.scalar_summary("validation error", (1.0 - accuracy))
+    tf.summary.scalar("validation error", (1.0 - accuracy))
 
     return accuracy
 
@@ -73,13 +73,13 @@ if __name__ == '__main__':
 
         eval_op = evaluate(output, y)
 
-        summary_op = tf.merge_all_summaries()
+        summary_op = tf.summery.merge_all()
 
         saver = tf.train.Saver()
 
         sess = tf.Session()
 
-        summary_writer = tf.train.SummaryWriter("logistic_logs/",
+        summary_writer = tf.summary.FileWriter("logistic_logs/",
                                             graph_def=sess.graph_def)
 
         
